@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: debug-box
+spec:
+  selector:
+    matchLabels:
+      run: debug-box
+  template:
+    metadata:
+      labels:
+        run: debug-box
+    spec:
+      containers:
+        - name: debug-box
+          image: bennycooly/debug-box:latest
+          stdin: true
+          tty: true
+          securityContext:
+            privileged: true
+          volumeMounts:
+            - mountPath: /tmp
+              name: tmp-dir
+            {{- with .Values.extraVolumeMounts }}
+            {{- toYaml . | nindent 12 }}
+            {{- end }}
+      volumes:
+        - emptyDir: {}
+          name: tmp-dir
+        {{- with .Values.extraVolumes }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
