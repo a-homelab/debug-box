@@ -11,6 +11,9 @@ spec:
       labels:
         run: debug-box
     spec:
+      {{- with .Values.runtimeClassName }}
+      runtimeClassName: {{ . | quote }}
+      {{- end }}
       containers:
         - name: debug-box
           image: bennycooly/debug-box:latest
